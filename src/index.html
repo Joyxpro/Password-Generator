@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./output.css">
+    <title>Password Generator</title>
+</head>
+
+<body class="bg-slate-900 p-5">
+    <h1 class="text-center text-4xl font-bold text-orange-600">Password Generator</h1>
+    <div class="password-generator border-2 border-white rounded-xl p-5 mx-auto mt-4 max-w-[80vw] flex flex-col gap-4 items-center">
+        <div class="password-copy flex justify-center w-full">
+            <input type="text" placeholder="Generated password" class="w-[70%] p-4 bg-white text-black border-2 border-white rounded-xl" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;" id="password">
+            <input type="button" class="bg-blue-600 rounded-xl w-[10%] text-xl text-white cursor-pointer" value="copy" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" onclick="copyPassword()">
+        </div>
+        <div class="options w-full flex justify-center gap-10 mt-2">
+            <div class="numberAllowed w-[15%]">
+                <label class="m-1 text-white text-xl">Numbers: </label>
+                <input type="checkbox" id="numberAllowed">
+            </div>
+            <div class="character-allowed w-[15%]">
+                <label class="m-1 text-white text-xl">Special Characters: </label>
+                <input type="checkbox" id="characterAllowed">
+            </div>
+        </div>
+        <div class="generate w-full flex justify-center mt-4">
+            <input type="button" class="bg-green-600 rounded-xl text-xl text-white cursor-pointer p-2" value="Generate Password" onclick="generatePassword()">
+        </div>
+    </div>
+
+    <script>
+        let length;
+        let numberAllowed = false;
+        let characterAllowed = false;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            length = prompt("Enter the length of the password to be generated: ");
+            generatePassword();
+        });
+
+        document.getElementById("numberAllowed").addEventListener("change", function() {
+            numberAllowed = this.checked;
+            generatePassword();
+        });
+
+        document.getElementById("characterAllowed").addEventListener("change", function() {
+            characterAllowed = this.checked;
+            generatePassword();
+        });
+
+        const passwordGenerator = () => {
+            let pass = "";
+            let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            if (numberAllowed) str += "1234567890";
+            if (characterAllowed) str += "!@#$%^&-_=+*/.,<>/?:;";
+
+            for (let i = 0; i < length; i++) {
+                let index = Math.floor(Math.random() * str.length);
+                pass += str[index];
+            }
+            return pass;
+        }
+
+        const generatePassword = () => {
+            document.getElementById("password").value = passwordGenerator();
+        }
+
+        const copyPassword = () => {
+            const passwordField = document.getElementById("password");
+            passwordField.select();
+            document.execCommand("copy");
+            alert("Password copied to clipboard");
+        }
+    </script>
+</body>
+</html>
